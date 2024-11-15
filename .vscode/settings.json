@@ -1,0 +1,8 @@
+{
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "conventionalCommits.scopes": ["scripts"]
+}

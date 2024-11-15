@@ -1,0 +1,6 @@
+node_modules
+.env.development
+.DS_STORE
+database.sqlite3
+build
+logs
