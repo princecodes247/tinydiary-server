@@ -3,15 +3,19 @@ import { loginSchema } from "../user/user.validation";
 import { InvalidCredentialsError } from "./auth.errors";
 import { login, register } from "./auth.service";
 
-export const registerController = async (req: Request, res: Response) => {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).json({ errors: errors.array() });
-    // }
+export const registerController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json({ errors: errors.array() });
+        // }
+        console.log(req.body, "qwerty")
+        const newUser = await register(req.body)
 
-    const newUser = register(req.body)
-
-    res.status(201).json({ message: "User registered successfully", data: newUser });
+        res.status(201).json({ message: "User registered successfully", data: newUser });
+    } catch (error) {
+        next(error)
+    }
 };
 
 

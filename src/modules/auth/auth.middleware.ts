@@ -1,10 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
+import { toObjectId } from "monarch-orm";
+import { collections } from "../../db";
 import { verifyToken } from "../../lib/jwt";
 import { AuthenticatedRequest } from "../../types";
 import { AuthenticationError } from "./auth.errors";
 
-export const authMiddleware = async (
-    req: Request,
+export const hasAuth = async (
+    req: AuthenticatedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -15,12 +17,24 @@ export const authMiddleware = async (
         }
 
         const token = authHeader.split(' ')[1]
-        const decoded = verifyToken(token)
-
-        req.user = decoded as any
+        const decoded = verifyToken<{
+            _id: string;
+            name: string;
+        }>(token)
+        if (!decoded) {
+            throw new AuthenticationError('Invalid token provided')
+        }
+        const userData = await collections.users.findOne({ _id: toObjectId(decoded._id) }).omit({
+            password: true
+        }).exec()
+        if (!userData) {
+            throw new AuthenticationError('No such user exists')
+        }
+        req.user = userData
         next()
     } catch (error) {
-        next(new AuthenticationError('Invalid token'))
+        next(error)
+        // next(new AuthenticationError('Invalid token'))
     }
 }
 

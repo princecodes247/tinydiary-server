@@ -16,7 +16,7 @@ const envSchema = z.object({
         .enum(['development', 'production', 'test'])
         .default('development'),
     PORT: z.string().transform(Number).default('3001'),
-    DB_URI: z.string().default('mongodb://localhost:27017'),
+    DB_URI: z.string().default('mongodb://localhost:27017/tinydiary'),
     LOG_LEVEL: z.enum(['info', 'warn', 'error']).default('info'),
 })
 

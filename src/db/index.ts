@@ -16,11 +16,11 @@ export const NoteSchema = createSchema("notes", {
     content: string(),
     createdAt: createdAtDate(),
     updatedAt: updatedAtDate(),
-    userId: objectId()
+    owner: objectId()
 })
 
 // const NoteSchema = _NoteSchema.relations(({ one }) => ({
-//     userId: one(UserSchema, "_id")
+//     owner: one(UserSchema, "_id")
 // }))
 
 

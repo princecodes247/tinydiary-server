@@ -4,11 +4,11 @@ import { generateToken } from '../../lib/jwt'
 import { LoginInput } from '../user/user.validation'
 import { InvalidCredentialsError, RegistrationError } from './auth.errors'
 
-export const login = async ({ name, password }: LoginInput) => {
-    const user = await collections.users.findOne({ name }).exec()
+export const login = async ({ email, password }: LoginInput) => {
+    const user = await collections.users.findOne({ email }).exec()
 
     if (!user) {
-        throw new InvalidCredentialsError('Invalid credentials')
+        throw new InvalidCredentialsError('No user found')
     }
 
     const isValidPassword = await comparePassword(password, user.password)
@@ -16,7 +16,10 @@ export const login = async ({ name, password }: LoginInput) => {
         throw new InvalidCredentialsError('Invalid credentials')
     }
 
-    const token = generateToken(user)
+    const token = generateToken({
+        _id: user._id,
+        name: user.name,
+    })
 
     return {
         user: {
@@ -29,9 +32,9 @@ export const login = async ({ name, password }: LoginInput) => {
 }
 
 export const register = async ({ name, email, password }: TUserInput) => {
-    const existingUser = collections.users.find({ email });
+    const existingUser = await collections.users.findOne({ email }).exec();
     if (existingUser) {
-        throw new RegistrationError("User already exists")
+        throw new RegistrationError("User already exists " + email)
     }
 
     const hashedPassword = await hashPassword(password);

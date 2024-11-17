@@ -1,10 +1,11 @@
 import { toObjectId } from 'monarch-orm';
-import { collections } from '../../db';
+import { collections, TNoteInput } from '../../db';
 
-export const getNotes = async () => {
-    const notes = await collections.notes.find().exec();
+export const getNotes = async (page = 1, limit = 10) => {
+    const notes = await collections.notes.find().skip((page - 1) * 10).limit(limit).exec();
+    const count = await collections.notes.countDocuments()
     console.log({ notes })
-    return notes
+    return { data: notes, meta: { total: count } }
 }
 
 
@@ -18,14 +19,14 @@ export const getNoteById = async (id: string) => {
 }
 
 
-export const createNote = async ({ title, content, userId }: { title: string, content: string, userId: string }) => {
-    const formattedUserId = toObjectId(userId);
+export const createNote = async (inputData: TNoteInput) => {
+    const formattedUserId = toObjectId(inputData.owner);
     if (!formattedUserId) return;
 
     const note = await collections.notes.insertOne({
-        title,
-        content,
-        userId: formattedUserId
+        title: inputData.title,
+        content: inputData.content,
+        owner: formattedUserId
     }).exec();
 
     console.log({ note });

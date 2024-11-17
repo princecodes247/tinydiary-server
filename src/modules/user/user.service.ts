@@ -1,8 +1,6 @@
-import bcrypt from 'bcrypt'
 import { toObjectId } from 'monarch-orm'
 import { collections } from '../../db'
 import { UserNotFoundError } from './user.errors'
-import { CreateUserInput } from './user.validation'
 
 const SALT_ROUNDS = 10
 
@@ -23,21 +21,7 @@ export const getUserById = async (id: string) => {
     return {
         _id: user._id,
         name: user.name,
+        email: user.email,
         accountType: user.accountType
     }
 }
-
-export const createUser = async (userData: CreateUserInput) => {
-    const hashedPassword = await bcrypt.hash(userData.password, SALT_ROUNDS)
-
-    const user = await collections.users.insertOne({
-        ...userData,
-        password: hashedPassword
-    }).exec()
-
-    return {
-        _id: user._id,
-        name: user.name,
-        accountType: user.accountType
-    }
-} 

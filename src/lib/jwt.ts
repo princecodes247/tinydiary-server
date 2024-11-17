@@ -10,9 +10,9 @@ export function generateToken(payload: object): string {
 }
 
 // Verifies a JWT token and returns the decoded payload
-export function verifyToken(token: string) {
+export function verifyToken<T extends object>(token: string): T | null {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, JWT_SECRET) as T;
   } catch (err) {
     return null;
   }
