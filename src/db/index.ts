@@ -1,4 +1,4 @@
-import { createClient, createDatabase, createdAtDate, createSchema, InferSchemaInput, InferSchemaOutput, literal, objectId, string, updatedAtDate } from "monarch-orm";
+import { createClient, createdAt, createDatabase, createSchema, InferSchemaInput, InferSchemaOutput, literal, objectId, string, updatedAt } from "monarch-orm";
 import env from "../config";
 
 
@@ -7,21 +7,21 @@ const UserSchema = createSchema("users", {
     email: string(),
     password: string(),
     accountType: literal("free", "paid"),
-    createdAt: createdAtDate(),
-    updatedAt: updatedAtDate()
+    createdAt: createdAt(),
+    updatedAt: updatedAt()
 })
 
-export const NoteSchema = createSchema("notes", {
+export const _NoteSchema = createSchema("notes", {
     title: string(),
     content: string(),
-    createdAt: createdAtDate(),
-    updatedAt: updatedAtDate(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
     owner: objectId()
 })
 
-// const NoteSchema = _NoteSchema.relations(({ one }) => ({
-//     owner: one(UserSchema, "_id")
-// }))
+const NoteSchema = _NoteSchema.relations(({ one }) => ({
+    owner: one(UserSchema, "_id")
+}))
 
 
 
