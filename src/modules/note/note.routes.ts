@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { hasAuth } from '../auth/auth.middleware';
-import { createNewNoteController, fetchNotesController, getNoteController } from './note.controller';
+import { createNewNoteController, deleteNoteController, fetchNotesController, getNoteController } from './note.controller';
 
 
 const noteRouter = Router();
@@ -8,5 +8,6 @@ const noteRouter = Router();
 noteRouter.get('/notes', fetchNotesController);
 noteRouter.post('/notes', hasAuth, createNewNoteController);
 noteRouter.get('/notes/:id', getNoteController);
+noteRouter.delete('/notes/:id', deleteNoteController)
 
 export default noteRouter;

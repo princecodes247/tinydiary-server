@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { AuthenticatedRequest } from '../../types';
-import { createNote, getNoteById, getNotes } from './note.service';
+import { createNote, deleteNote, getNoteById, getNotes } from './note.service';
 
 // Fetch current authenticated notes
 export const fetchNotesController = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -31,6 +31,17 @@ export const getNoteController = async (req: AuthenticatedRequest, res: Response
     try {
         const noteId = req.params.id;
         const note = await getNoteById(noteId);
+        res.json(note);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const deleteNoteController = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const noteId = req.params.id;
+        const note = await deleteNote(noteId);
         res.json(note);
     } catch (error) {
         next(error);

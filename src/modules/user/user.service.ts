@@ -6,8 +6,11 @@ const SALT_ROUNDS = 10
 
 export const getUsers = async () => {
     const users = await collections.users.find().omit({
-        password: true
+        password: true,
+    }).populate({
+        notes: true
     }).exec()
+    console.log({ users })
     return users
 }
 
@@ -15,13 +18,8 @@ export const getUserById = async (id: string) => {
     const formattedId = toObjectId(id)
     if (!formattedId) throw new UserNotFoundError()
 
-    const user = await collections.users.findOne({ _id: formattedId }).exec()
+    const user = await collections.users.findOne({ _id: formattedId }).omit({ password: true }).populate({ notes: true }).exec()
     if (!user) throw new UserNotFoundError()
 
-    return {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        accountType: user.accountType
-    }
+    return user
 }
