@@ -14,7 +14,7 @@
         "http-terminator": "^3.2.0",
         "jsonwebtoken": "^9.0.2",
         "luxon": "^3.5.0",
-        "monarch-orm": "^0.5.1",
+        "monarch-orm": "^0.5.3",
         "zod": "^3.23.8"
     },
     "scripts": {

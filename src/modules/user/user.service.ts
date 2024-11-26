@@ -8,7 +8,11 @@ export const getUsers = async () => {
     const users = await collections.users.find().omit({
         password: true,
     }).populate({
-        notes: true
+        notes: {
+            select: {
+                title: true
+            }
+        }
     }).exec()
     console.log({ users })
     return users

@@ -5,7 +5,7 @@ import { createNewNoteController, deleteNoteController, fetchNotesController, ge
 
 const noteRouter = Router();
 
-noteRouter.get('/notes', fetchNotesController);
+noteRouter.get('/notes', hasAuth, fetchNotesController);
 noteRouter.post('/notes', hasAuth, createNewNoteController);
 noteRouter.get('/notes/:id', getNoteController);
 noteRouter.delete('/notes/:id', deleteNoteController)
